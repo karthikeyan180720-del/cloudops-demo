@@ -1,0 +1,12 @@
+{
+  "name": "cloudops-demo",
+  "version": "1.0.0",
+  "description": "CloudOps Enterprise DevOps Project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
