@@ -11,10 +11,10 @@ pipeline {
 
         stage('Verify Project') {
             steps {
-                sh 'git --version'
-                sh 'node --version'
-                sh 'npm --version'
-                sh 'ls -la'
+                bat 'git --version'
+                bat 'node --version'
+                bat 'npm --version'
+                bat 'dir'
             }
         }
     }
