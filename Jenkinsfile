@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -15,6 +14,12 @@ pipeline {
                 bat 'node --version'
                 bat 'npm --version'
                 bat 'dir'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'npm ci'
             }
         }
     }
