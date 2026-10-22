@@ -45,4 +45,5 @@ A complete AWS DevOps and Kubernetes training project.
 \- Kubernetes Dashboard
 
 \- AWS Client VPN
-\-  Webhook test
+\- Webhook test
+\- Testing Jenkins automatic build
