@@ -25,10 +25,10 @@ pipeline {
 
         stage('Deploy Kubernetes') {
             steps {
-                bat '''
-                    kubectl -n cloudops set image deployment/cloudops-demo cloudops-demo=karthik200618/cloudops-demo:%VERSION%
-                    kubectl -n cloudops rollout status deployment/cloudops-demo
-                '''
+               bat '''
+    "C:\\Users\\acer\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\kubectl.exe" -n cloudops set image deployment/cloudops-demo cloudops-demo=karthik200618/cloudops-demo:1.0.0
+    "C:\\Users\\acer\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\kubectl.exe" -n cloudops rollout status deployment/cloudops-demo
+'''
             }
         }
     }
