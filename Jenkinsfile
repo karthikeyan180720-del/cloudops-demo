@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -24,7 +23,7 @@ pipeline {
             }
         }
 
-            stage('Deploy Kubernetes') {
+        stage('Deploy Kubernetes') {
             steps {
                 bat '''
                     kubectl -n cloudops set image deployment/cloudops-demo cloudops-demo=karthik200618/cloudops-demo:%VERSION%
@@ -32,3 +31,5 @@ pipeline {
                 '''
             }
         }
+    }
+}
