@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'karthik200618/cloudops-demo:1.0.0'
+  IMAGE_NAME = 'karthik180720/cloudops-demo:1.0.0'
         NAMESPACE = 'cloudops'
         DEPLOYMENT = 'cloudops-demo'
         CONTAINER = 'cloudops-demo'
