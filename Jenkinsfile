@@ -1,5 +1,13 @@
+
 pipeline {
     agent any
+
+    environment {
+        IMAGE_NAME = 'karthik200618/cloudops-demo:1.0.0'
+        NAMESPACE = 'cloudops'
+        DEPLOYMENT = 'cloudops-demo'
+        CONTAINER = 'cloudops-demo'
+    }
 
     stages {
         stage('Checkout') {
@@ -10,25 +18,71 @@ pipeline {
 
         stage('Verify Project') {
             steps {
-                bat 'git --version'
-                bat 'node --version'
-                bat 'npm --version'
-                bat 'dir'
+                sh '''
+                    git --version
+                    node --version
+                    npm --version
+                    ls -la
+                '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm ci'
+                sh 'npm ci'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm test --if-present'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+
+        stage('Docker Hub Push') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login \
+                          -u "$DOCKER_USER" --password-stdin
+                        docker push "$IMAGE_NAME"
+                        docker logout
+                    '''
+                }
             }
         }
 
         stage('Deploy Kubernetes') {
             steps {
-               bat '''
-    "C:\\Users\\acer\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\kubectl.exe" -n cloudops set image deployment/cloudops-demo cloudops-demo=karthik200618/cloudops-demo:1.0.0
-    "C:\\Users\\acer\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\kubectl.exe" -n cloudops rollout status deployment/cloudops-demo
-'''
+                sh '''
+                    kubectl -n "$NAMESPACE" set image \
+                      deployment/"$DEPLOYMENT" \
+                      "$CONTAINER"="$IMAGE_NAME" \
+                      --kubeconfig=/var/lib/jenkins/.kube/config
+
+                    kubectl -n "$NAMESPACE" rollout status \
+                      deployment/"$DEPLOYMENT" \
+                      --kubeconfig=/var/lib/jenkins/.kube/config
+                '''
+            }
+        }
+
+        stage('Verify Pods') {
+            steps {
+                sh '''
+                    kubectl get pods -n "$NAMESPACE" \
+                      --kubeconfig=/var/lib/jenkins/.kube/config
+                '''
             }
         }
     }
