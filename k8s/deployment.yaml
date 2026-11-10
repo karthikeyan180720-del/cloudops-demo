@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: cloudops-demo
+  namespace: cloudops
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cloudops-demo
+
+  template:
+    metadata:
+      labels:
+        app: cloudops-demo
+
+    spec:
+      containers:
+        - name: cloudops-demo
+          image: karthik180720/cloudops-demo:latest
+
+          ports:
+            - containerPort: 3000
+
+          env:
+            - name: ENVIRONMENT
+              value: "kubernetes"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 20

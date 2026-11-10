@@ -1,0 +1,19 @@
+---
+- name: Deploy CloudOps Demo
+  hosts: app
+  become: yes
+
+  tasks:
+    - name: Pull Docker image
+      community.docker.docker_image:
+        name: "karthik180720/cloudops-demo:{{ image_tag }}"
+        source: pull
+
+    - name: Run application container
+      community.docker.docker_container:
+        name: cloudops-demo
+        image: "karthik180720/cloudops-demo:{{ image_tag }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "3000:3000"
