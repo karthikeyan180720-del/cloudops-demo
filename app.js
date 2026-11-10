@@ -1,3 +1,4 @@
+
 const express = require("express");
 const os = require("os");
 
@@ -7,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   res.json({
-    application: "CloudOps Enterprise Demo",
+    application: "CloudOps Enterprise v2",
     version: process.env.APP_VERSION || "1.0.0",
     environment: process.env.ENVIRONMENT || "local",
     hostname: os.hostname(),
